@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:forma_gym/viewmodels/home_view_model.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_colors.dart';
+import '../../viewmodels/home_view_model.dart';
 import '../../data/models/challenge_plan.dart';
-import '../plan/training_plan_screen.dart'; // استدعاء شاشة الخطة
+import '../plan/training_plan_screen.dart';
+// 1. استدعاء صفحة الجري (تأكد أن المسار صحيح)
+import '../running/running_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -89,7 +91,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 2. قسم التحديات (Challenges Section)
+                  // 2. قسم التحديات (Challenges)
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
@@ -103,7 +105,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
 
-                  // الكروت الأفقية
                   SizedBox(
                     height: 240,
                     child: ListView.builder(
@@ -149,7 +150,6 @@ class HomeScreen extends StatelessWidget {
                         ),
                     itemBuilder: (context, index) {
                       final item = viewModel.menuItems[index];
-                      // نمرر الـ viewModel هنا لنستطيع الوصول للتحديات في حالة الضغط على Training Plan
                       return _buildMenuCard(item, context, viewModel);
                     },
                   ),
@@ -177,11 +177,9 @@ class HomeScreen extends StatelessWidget {
 
   // --- Widgets ---
 
-  // تصميم كارت التحدي الأفقي
   Widget _buildChallengeCard(BuildContext context, ChallengePlan plan) {
     return GestureDetector(
       onTap: () {
-        // === التعديل هنا: تفعيل الانتقال وتمرير الخطة ===
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -197,7 +195,6 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              // ignore: deprecated_member_use
               color: plan.cardColor.withOpacity(0.3),
               blurRadius: 10,
               offset: const Offset(0, 5),
@@ -206,7 +203,6 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            // النص والتفاصيل
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -246,7 +242,6 @@ class HomeScreen extends StatelessWidget {
                     style: const TextStyle(color: Colors.white70, fontSize: 14),
                   ),
                   const Spacer(),
-                  // زر Start صغير
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 25,
@@ -267,13 +262,22 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
+            Positioned(
+              right: -10,
+              bottom: 0,
+              child: Image.asset(
+                plan.imageUrl,
+                height: 160,
+                fit: BoxFit.contain,
+                errorBuilder: (c, e, s) => const SizedBox(),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // تصميم كارت القائمة السفلية
   Widget _buildMenuCard(item, BuildContext context, HomeViewModel viewModel) {
     return Container(
       decoration: BoxDecoration(
@@ -291,10 +295,19 @@ class HomeScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
+
+          // === التعديل هنا ===
           onTap: () {
-            if (item.title == "Training Plan" || item.title == "Exercises") {
-              // عند الضغط على القائمة السفلية، نفتح أول خطة كافتراضي
-              // أو يمكن توجيهه لصفحة أخرى حسب الحاجة
+            // 1. إذا كان العنصر هو Running
+            if (item.title == "Running") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RunningScreen()),
+              );
+            }
+            // 2. إذا كان العنصر هو التمارين (نفتح أول تحدي افتراضياً)
+            else if (item.title == "Training Plan" ||
+                item.title == "Exercises") {
               if (viewModel.challenges.isNotEmpty) {
                 Navigator.push(
                   context,
@@ -305,7 +318,15 @@ class HomeScreen extends StatelessWidget {
                 );
               }
             }
+            // 3. باقي العناصر (يمكنك إضافة صفحات لها لاحقاً)
+            else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text("Opening ${item.title}...")),
+              );
+            }
           },
+
+          // ==================
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

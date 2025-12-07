@@ -48,6 +48,11 @@ dependencies:
   font_awesome_flutter:     # أيقونات جميلة
   google_fonts: ^5.1.0
   intl: ^0.18.1
+  flutter_map: ^6.0.0      # مكتبة الخرائط المجانية
+  latlong2: ^0.9.0         # للتعامل مع الإحداثيات
+  geolocator: ^10.1.0      # للموقع GPS (كما هو)
+  permission_handler: ^11.0.1 # للأذونات (كما هو)
+  stop_watch_timer: ^3.1.1 # للعداد (كما هو)
 
 dev_dependencies:
   flutter_test:
