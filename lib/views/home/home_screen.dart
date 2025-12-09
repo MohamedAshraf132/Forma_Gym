@@ -4,8 +4,8 @@ import '../../core/constants/app_colors.dart';
 import '../../viewmodels/home_view_model.dart';
 import '../../data/models/challenge_plan.dart';
 import '../plan/training_plan_screen.dart';
-// 1. استدعاء صفحة الجري (تأكد أن المسار صحيح)
 import '../running/running_screen.dart';
+import '../nutrition/nutrition_screen.dart'; // استدعاء صفحة التغذية
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -295,17 +295,24 @@ class HomeScreen extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(20),
-
-          // === التعديل هنا ===
           onTap: () {
-            // 1. إذا كان العنصر هو Running
+            // 1. الانتقال للجري
             if (item.title == "Running") {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const RunningScreen()),
               );
             }
-            // 2. إذا كان العنصر هو التمارين (نفتح أول تحدي افتراضياً)
+            // 2. الانتقال للتغذية
+            else if (item.title == "Meal Plan") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NutritionScreen(),
+                ),
+              );
+            }
+            // 3. الانتقال للتمارين (أول تحدي)
             else if (item.title == "Training Plan" ||
                 item.title == "Exercises") {
               if (viewModel.challenges.isNotEmpty) {
@@ -318,15 +325,13 @@ class HomeScreen extends StatelessWidget {
                 );
               }
             }
-            // 3. باقي العناصر (يمكنك إضافة صفحات لها لاحقاً)
+            // 4. باقي العناصر
             else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text("Opening ${item.title}...")),
               );
             }
           },
-
-          // ==================
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forma_gym/viewmodels/nutrition_view_model.dart';
 import 'package:forma_gym/viewmodels/running_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         // 2. أضفنا هذا السطر لحل المشكلة
         ChangeNotifierProvider(create: (_) => TrainingPlanViewModel()),
         ChangeNotifierProvider(create: (_) => RunningViewModel()),
+        ChangeNotifierProvider(create: (_) => NutritionViewModel()),
       ],
       child: MaterialApp(
         title: 'Capi Fitness',

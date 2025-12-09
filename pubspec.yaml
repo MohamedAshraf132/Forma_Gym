@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  fl_chart: ^0.60.0
+  fl_chart: ^0.69.0
   cached_network_image: ^3.4.1
   dio: ^5.2.2
   video_player: ^2.6.1
@@ -53,6 +53,7 @@ dependencies:
   geolocator: ^10.1.0      # للموقع GPS (كما هو)
   permission_handler: ^11.0.1 # للأذونات (كما هو)
   stop_watch_timer: ^3.1.1 # للعداد (كما هو)
+  path: ^1.8.3
 
 dev_dependencies:
   flutter_test:
